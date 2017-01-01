@@ -37,7 +37,7 @@ class ResizedStore(BaseStore):
                 image = Image.open(path)
                 image.thumbnail(self.image_size, Image.ANTIALIAS)
                 image.save(thumb_path, "JPEG", progressive=True)
-                print("Created: %s" % (path))
+                print("Created %s: %s" % (self.subdir, path))
             except IOError:
                 print("Not an image file: %s" % (path))
 

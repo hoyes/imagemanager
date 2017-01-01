@@ -6,12 +6,10 @@ import App from './App'
 import Thumbnails from './components/Thumbnails'
 
 Vue.use(VueResource);
+Vue.http.options.root = '/photos';
 
 new Vue({
   el: '#app',
   template: '<App/>',
-  components: { App },
-  http: {
-      root: '/api'
-  }
+  components: { App }
 });

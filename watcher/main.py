@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import imagecache
 import watchimages
 import signal
@@ -15,4 +16,8 @@ for name, value in config.items("Caches"):
     sizes = literal_eval("(" + value + ")")
     stores.add(imagecache.ResizedStore(image_path, name, sizes))
 
-watchimages.watchimages(image_path, stores)
+def terminate():
+    sys.exit()
+
+if __name__ == "__main__":
+    watchimages.watchimages(image_path, stores)

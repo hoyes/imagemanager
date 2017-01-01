@@ -6,9 +6,16 @@
 
     <b-navbar fixed="top" type="default" full>
 <div class="container-fluid">
-        <div class="navbar-brand" href="#">Image Gallery</div>
-        
+        <div class="navbar-header">
+            <div class="navbar-brand" href="#">Image Gallery</div>
+        </div>
         <div class="nav navbar-form navbar-right">
+            <b-button variant="default" v-on:click="historyBack">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </b-button>
+            <b-button variant="default" v-on:click="historyForward">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </b-button>
             <b-button variant="default" v-on:click="showSelectFolder">
                 Select Folder
             </b-button>
@@ -43,24 +50,35 @@ export default {
       SelectFolder
   },
   data: function() {
+      var root = document.location.pathname;
+      root = root.substr(this.$http.options.root.length)
       return {
-          selectedPath: document.location.pathname
+          selectedPath: root
       }
   },
   methods: {
       pathSelected: function(path) {
           this.selectedPath = path;
-          window.history.pushState({path: path}, '', path);
+          var uri = this.$http.options.root + path;
+          window.history.pushState({path: path}, '', uri);
       },
       showSelectFolder: function() {
           this.$refs.select_folder.show();
+      },
+      historyBack: function() {
+          if (window.history.length > 1) {
+              window.history.go(-1);
+	  }
+      },
+      historyForward: function() {
+          window.history.go(1);
       }
   },
   created: function() {
       var self = this;
       
-      window.addEventListener('popstate', () => {
-          self.selectedPath = window.location.pathname
+      window.addEventListener('popstate', (event) => {
+          self.selectedPath = event.state.path
       })
   },
   mounted: function() {

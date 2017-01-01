@@ -7,10 +7,10 @@
           <div class="grid" id="thumbnails">
              <div class="grid-item thumbnail" v-for="image in images" 
                         v-bind:style="{ width: image.thumbnail.width, height: image.thumbnail.height }">
-                 <a v-bind:href="'/api/images/' + image.preview.path"
-                   v-bind:data-download-url="'/api/images' + image.full.path">
+                 <a v-bind:href="image_path + image.preview.path"
+                   v-bind:data-download-url="image_path + image.full.path">
                  
-                     <img v-bind:src="'/api/images/' +image.thumbnail.path"
+                     <img v-bind:src="image_path + image.thumbnail.path"
                      v-bind:width="image.thumbnail.width"
                      v-bind:height="image.thumbnail.height"
                      />
@@ -36,15 +36,18 @@ export default {
       path: String
   },
   data: function() {
+      var image_path = this.$http.options.root + '/files';
+
       return {
           images: [],
           masonry: null,
-          gallery: null
+          gallery: null,
+          image_path: image_path
       }
   },
   methods: {
       loadImages: function() {
-          this.$http.get('/api/images.json?path=' + this.path).then((response) => {
+          this.$http.get('api/photos.json?path=' + this.path).then((response) => {
             this.images = response.body;
             this.masonry.layout();
             
@@ -73,7 +76,9 @@ export default {
         var el = document.querySelector('#thumbnails');
         window.lgData[el.getAttribute('lg-uid')].destroy(true);
         this.gallery = lightGallery(el, {
-            selector: '.grid-item a'
+            selector: '.grid-item a',
+            progressBar: false,
+            hideBarsDelay: 3000
         });
    }
 }

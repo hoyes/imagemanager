@@ -47,7 +47,7 @@ export default {
     toggle: function () {
         this.open = !this.open
         if (this.open) {
-            this.$http.get('/api/folders.json?path=' + this.model.path).then((response) => {
+            this.$http.get('api/folders.json?path=' + this.model.path).then((response) => {
                 this.children = response.body;
             }, (response) => {
                 // error callback
